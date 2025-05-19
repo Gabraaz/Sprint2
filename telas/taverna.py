@@ -5,7 +5,7 @@ from moedas import mostrar_saldo, gastar
 from fofocas import decisao_fofoca, mostrar_caderno, fofoca_aleatoria
 
 
-
+#              ~~𝐅𝐔𝐍𝐂̧𝐎𝐄𝐒~~ 
 def taverna():
     while True:
         clear_screen()

@@ -27,6 +27,7 @@ def mostrar_inventario():
     print("\n=== INVENTÁRIO ===")
     if not inventario:
         print("Seu inventário está vazio.")
+        input("\nPressione Enter para continuar...")
     else:
         for nome, info in inventario.items():
             print(f"{nome} x{info['quantidade']}")
@@ -34,3 +35,4 @@ def mostrar_inventario():
             if info["dano"]: print(f"  Dano: {info['dano']}")
             if info["cura"]: print(f"  Cura: {info['cura']}")
             if info["descricao"]: print(f"  Descrição: {info['descricao']}")
+            input("\nPressione Enter para continuar...")

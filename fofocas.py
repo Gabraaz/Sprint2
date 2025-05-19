@@ -27,6 +27,7 @@ caderno_de_missoes = []
 def anotar_missao(missao):
     caderno_de_missoes.append(missao)
     typedPrint("Missão anotada no caderno. Você pode investigá-la mais tarde.", Config.speed)
+    time.sleep(1)
 
 def mostrar_caderno():
     if not caderno_de_missoes:

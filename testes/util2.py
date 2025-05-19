@@ -1,26 +1,16 @@
-# util.py
 import os
 import time
 
-class Config:
-    speed = 0.05
-
-
-# APAGAR TERMINAL
-def clear_screen(): #funçao para limpar o terminal
+def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-
-
-# ANIMAR TEXTO
-def typedPrint(texto, delay=0.05): #funçao para fazer o texto animado.
-    for char in texto:
+def typedPrint(text, delay=0.02):
+    for char in text:
         print(char, end='', flush=True)
-        time.sleep(delay if char not in ".!?,:" else delay + 0.1)
+        time.sleep(delay)
     print()
 
-# COR PARA TEXTO
-def color_text(text, cor="amarelo"):
+def color_text(text, cor="branco"):
     cores = {
         "vermelho": "\033[91m",
         "verde": "\033[92m",
@@ -32,4 +22,3 @@ def color_text(text, cor="amarelo"):
         "reset": "\033[0m"
     }
     return f"{cores.get(cor, cores['branco'])}{text}{cores['reset']}"
-

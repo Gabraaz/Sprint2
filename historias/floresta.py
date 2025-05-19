@@ -1,5 +1,6 @@
 from util import Config, typedPrint, clear_screen
 from personagem.inventario import adicionar_item, remover_item, mostrar_inventario
+from telas.taverna import taverna
 # Importa mostrar_caderno se usar ele aqui
 # from fofocas import mostrar_caderno  # se existir
 
@@ -25,7 +26,6 @@ def floresta_inicio():
 
         elif escolha == "3":
             mostrar_inventario()
-
         elif escolha == "4":
             typedPrint("Abrindo caderno...", Config.speed)
             clear_screen()

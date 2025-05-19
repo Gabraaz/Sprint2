@@ -2,33 +2,47 @@ from util import clear_screen
 from util import Config, typedPrint
 from telas.taverna import taverna
 from historias.inicio import intro_jogo
+from codigos import tela_resgate_codigo
+from npcs.npcarbusto import npc_brotando_do_arbusto
+from telas.telasrich import exibir_logo
+from InquirerPy import inquirer
+
+import time
 
 # Tela Menu
-def menu_principal():
+from InquirerPy import inquirer
+import time
+
+def menu_principal(jogador):
     while True:
         clear_screen()
-        print("=== BEM-VINDO AO RPG DO VILLAREJO ===")
-        print("1. Jogar")
-        print("2. Ler Regras")
-        print("3. Inserir Código Secreto")
-        print("4. Sair")
+        exibir_logo()
+        
+        escolha = inquirer.select(
+            message="Escolha uma opção:",
+            choices=[
+                "Jogar",
+                "Ler Regras",
+                "Resgatar Código",
+                "Sair"
+            ],
+            pointer="👉",
+        ).execute()
 
-        escolha = input("Escolha uma opção: ")
-
-        if escolha == "1":
+        if escolha == "Jogar":
             typedPrint("Iniciando o jogo...", Config.speed)
-            intro_jogo() #temporario para testes.
-            break  # por enquanto só sai do loop
-        elif escolha == "2":
+            time.sleep(1)
+            npc_brotando_do_arbusto()  # temporário para testes
+            break
+        elif escolha == "Ler Regras":
             clear_screen()
             print("\n📜 Regras do Jogo:")
             print("• Explore a floresta e derrote inimigos.")
             print("• Visite o vilarejo para comprar melhorias.")
             print("• Sobreviva e vença o desafio final!")
-        elif escolha == "3":
-            codigo = input("\nDigite seu código mágico: ")
-            print(f"Código '{codigo}' recebido! (função bônus virá depois)")
-        elif escolha == "4":
+        elif escolha == "Resgatar Código":
+            tela_resgate_codigo(jogador)
+        elif escolha == "Sair":
             print("Saindo do jogo... Até logo!")
             clear_screen()
             break

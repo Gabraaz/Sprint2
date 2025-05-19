@@ -38,7 +38,6 @@ def explorar_praia():
     typedPrint("Você encontra um canivete enferrujado. Não é muito, mas pode ser útil.", Config.speed)
     adicionar_item("Canivete Enferrujado", quantidade=1, tipo="Arma Basica", dano=5, descricao="Um canivete velho, mas um pouco afiado.")
     mostrar_inventario()
-    input("\nPressione Enter para continuar...")
     explorar_floresta()  # Leva pra floresta depois
 
 def explorar_floresta():
