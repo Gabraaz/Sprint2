@@ -27,36 +27,33 @@ def npc_brotando_do_arbusto():
     time.sleep(1.5)
     typedPrint(f"👤 ???: Nunca te vi por aqui, veio da onde?", 0.04)
 
+    while True:
+        escolha = inquirer.select(
+            message="Escolha uma opção:",
+            choices=[
+                "Quem é voce?",
+                "Aonde estou?",
+                "Atacar ele"
+            ],
+            pointer="👉",
+        ).execute()
+        if escolha == "Quem é voce?":
+            typedPrint("QUem é voce...?...", 0.04)
+            time.sleep(1)
+            break
+        elif escolha == "Aonde estou?":
+            clear_screen()
+        elif escolha == "Atacar ele":
+            print("Ele te Matou")
+        elif escolha == "Sair":
+            print("Saindo do jogo... Até logo!")
+            clear_screen()
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
 
-
-#ERRO QUE APARECE NA TELA INICIAL, NAO REOSLVIDO AINDA!!!
-while True:
-    escolha = inquirer.select(
-        message="Escolha uma opção:",
-        choices=[
-            "Quem é voce?",
-            "Aonde estou?",
-            "Atacar ele"
-        ],
-        pointer="👉",
-    ).execute()
-    if escolha == "Quem é voce?":
-        typedPrint("QUem é voce...?...", 0.04)
-        time.sleep(1)
-        break
-    elif escolha == "Aonde estou?":
-        clear_screen()
-    elif escolha == "Atacar ele":
-        print("Ele te Matou")
-    elif escolha == "Sair":
-        print("Saindo do jogo... Até logo!")
-        clear_screen()
-        break
-    else:
-        print("Opção inválida. Tente novamente.")
-
-    input("\nPressione Enter para continuar...")
-    print("\n" + "=" * 40 + "\n")
+        input("\nPressione Enter para continuar...")
+        print("\n" + "=" * 40 + "\n")
 
 
 

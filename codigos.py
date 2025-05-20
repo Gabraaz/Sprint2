@@ -2,6 +2,7 @@
 
 from personagem.inventario import adicionar_item
 from util import clear_screen
+from playsound import playsound
 
 
 codigos_validos = {
@@ -31,6 +32,8 @@ def tela_resgate_codigo(jogador):
 
         if codigo == "":
             print("Saindo da tela de códigos.\n")
+            playsound("sons/voltartela.mp3")
+
             break
 
         if codigo in codigos_resgatados:
@@ -40,5 +43,9 @@ def tela_resgate_codigo(jogador):
             print(f"🎁 {recompensa['mensagem']}")
             codigos_resgatados.add(codigo)
             print("✅ Código resgatado com sucesso!\n")
+            playsound("sons/entrartela.mp3")
         else:
             print("❌ Código inválido.\n")
+            playsound("sons/mensagemerro.mp3")
+
+            

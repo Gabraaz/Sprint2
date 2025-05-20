@@ -6,6 +6,9 @@ from codigos import tela_resgate_codigo
 from npcs.npcarbusto import npc_brotando_do_arbusto
 from telas.telasrich import exibir_logo
 from InquirerPy import inquirer
+from playsound import playsound
+
+
 
 import time
 
@@ -30,11 +33,13 @@ def menu_principal(jogador):
         ).execute()
 
         if escolha == "Jogar":
+            playsound("sons/iniciandojogo.mp3")
             typedPrint("Iniciando o jogo...", Config.speed)
             time.sleep(1)
             npc_brotando_do_arbusto()  # temporário para testes
             break
         elif escolha == "Ler Regras":
+            playsound("sons/entrartela.mp3")
             clear_screen()
             print("\n📜 Regras do Jogo:")
             print("• Explore a floresta e derrote inimigos.")
@@ -43,6 +48,7 @@ def menu_principal(jogador):
         elif escolha == "Resgatar Código":
             tela_resgate_codigo(jogador)
         elif escolha == "Sair":
+            playsound("sons/voltartela.mp3")
             print("Saindo do jogo... Até logo!")
             clear_screen()
             break
