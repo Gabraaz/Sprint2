@@ -7,6 +7,7 @@ from npcs.npcarbusto import npc_brotando_do_arbusto
 from telas.telasrich import exibir_logo
 from InquirerPy import inquirer
 from playsound import playsound
+from tqdm import tqdm
 
 
 
@@ -16,11 +17,21 @@ import time
 from InquirerPy import inquirer
 import time
 
+
+def tela_carregamento(mensagem="Carregando Jogo", jogador=None):
+    clear_screen()
+    for _ in tqdm(range(30), desc=mensagem, ncols=60, bar_format="{l_bar}{bar}|"):
+        time.sleep(0.05)
+    time.sleep(1)
+    if jogador is None: # tirar o not funciona, se ficar, nao funciona
+        menu_principal(jogador)
+
+
 def menu_principal(jogador):
     while True:
         clear_screen()
         exibir_logo()
-        
+
         escolha = inquirer.select(
             message="Escolha uma opção:",
             choices=[
