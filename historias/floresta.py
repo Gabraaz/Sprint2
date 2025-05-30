@@ -1,6 +1,9 @@
 from util import Config, typedPrint, clear_screen
 from personagem.inventario import adicionar_item, remover_item, mostrar_inventario
 from telas.taverna import taverna
+
+import time
+
 # Importa mostrar_caderno se usar ele aqui
 # from fofocas import mostrar_caderno  # se existir
 

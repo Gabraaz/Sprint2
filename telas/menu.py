@@ -2,6 +2,7 @@ from util import clear_screen
 from util import Config, typedPrint
 from telas.taverna import taverna
 from historias.inicio import intro_jogo
+from historias.floresta import floresta_inicio
 from codigos import tela_resgate_codigo
 from npcs.npcarbusto import npc_brotando_do_arbusto
 from telas.telasrich import exibir_logo
@@ -47,7 +48,7 @@ def menu_principal(jogador):
             playsound("sons/iniciandojogo.mp3")
             typedPrint("Iniciando o jogo...", Config.speed)
             time.sleep(1)
-            npc_brotando_do_arbusto()  # temporário para testes
+            intro_jogo()  # temporário para testes
             break
         elif escolha == "Ler Regras":
             playsound("sons/entrartela.mp3")

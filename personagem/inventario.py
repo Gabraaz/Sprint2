@@ -1,5 +1,10 @@
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.align import Align
 
 inventario = {}
+console = Console()
 
 def adicionar_item(nome, quantidade=1, tipo=None, dano=0, cura=0, descricao=""):
     if nome in inventario:
@@ -12,27 +17,40 @@ def adicionar_item(nome, quantidade=1, tipo=None, dano=0, cura=0, descricao=""):
             "cura": cura,         # Se for uma poção
             "descricao": descricao
         }
-    print(f"{quantidade}x {nome} adicionado(s) ao inventário.")
+    console.print(f"[green]{quantidade}x {nome} adicionado(s) ao inventário.[/green]")
 
 def remover_item(nome, quantidade=1):
     if nome in inventario:
         inventario[nome]["quantidade"] -= quantidade
         if inventario[nome]["quantidade"] <= 0:
             del inventario[nome]
-        print(f"{quantidade}x {nome} removido(s) do inventário.")
+        console.print(f"[red]{quantidade}x {nome} removido(s) do inventário.[/red]")
     else:
-        print(f"{nome} não está no inventário.")
+        console.print(f"[yellow]{nome} não está no inventário.[/yellow]")
 
 def mostrar_inventario():
-    print("\n=== INVENTÁRIO ===")
     if not inventario:
-        print("Seu inventário está vazio.")
-        input("\nPressione Enter para continuar...")
-    else:
-        for nome, info in inventario.items():
-            print(f"{nome} x{info['quantidade']}")
-            if info["tipo"]: print(f"  Tipo: {info['tipo']}")
-            if info["dano"]: print(f"  Dano: {info['dano']}")
-            if info["cura"]: print(f"  Cura: {info['cura']}")
-            if info["descricao"]: print(f"  Descrição: {info['descricao']}")
-            input("\nPressione Enter para continuar...")
+        console.print(Panel("[bold red]Seu inventário está vazio.[/bold red]", title="Inventário"))
+        return
+
+    tabela = Table(title="Inventário", header_style="bold cyan")
+    tabela.add_column("Item", style="bold white")
+    tabela.add_column("Qtd", justify="center")
+    tabela.add_column("Tipo", justify="center")
+    tabela.add_column("Dano", justify="center")
+    tabela.add_column("Cura", justify="center")
+    tabela.add_column("Descrição", style="dim")
+
+    for nome, info in inventario.items():
+        tabela.add_row(
+            nome,
+            str(info["quantidade"]),
+            info["tipo"] or "-",
+            str(info["dano"]) if info["dano"] else "-",
+            str(info["cura"]) if info["cura"] else "-",
+            info["descricao"] or "-"
+        )
+
+    painel = Panel(tabela, title="🧳 Inventário do Jogador", border_style="green")
+    console.print(Align.center(painel))
+
