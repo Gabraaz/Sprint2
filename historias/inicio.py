@@ -113,7 +113,10 @@ def explorar_praia():
     )
 
     mostrar_inventario()
-    sleep(4)
+    texto = Text("Pressione Enter para continuar...", style="grey74")
+    painel = Panel(texto, border_style="grey37", padding=(0, 2), title="⏳", title_align="left")
+    console.print(painel)
+    input()
 
     transicao_para_floresta()  # Aqui entra a mágica da transição
     explorar_floresta()

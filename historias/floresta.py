@@ -29,6 +29,7 @@ def floresta_inicio():
 
         elif escolha == "3":
             mostrar_inventario()
+            input("Pressione Enter para continuar...")
         elif escolha == "4":
             typedPrint("Abrindo caderno...", Config.speed)
             input("Pressione Enter para continuar...")

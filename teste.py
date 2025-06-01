@@ -1,139 +1,85 @@
-from util import Config, typedPrint, clear_screen
-from rich.console import Console
-from rich.panel import Panel
-from rich.text import Text
-from rich.columns import Columns
-from rich.progress import Progress
-from rich.style import Style
-from rich.box import ROUNDED, HEAVY
-from InquirerPy import inquirer, get_style
-from playsound import playsound
-from codigos import tela_resgate_codigo
-from historias.inicio import intro_jogo
-import time
+import csv
+import os
+import openai
 
-console = Console()
+import time 
 
-# Estilo personalizado para o menu
-def get_menu_style():
-    return {
-        "questionmark": "#FFD700 bold",
-        "answer": "#7FFF00 bold",
-        "input": "#FFFFFF",
-        "question": "bold",
-        "pointer": "#7B03FC bold",
-        "highlighted": "#FF4500",
-        "selected": "#7FFF00",
-        "separator": "#555555",
-        "instruction": "#AAAAAA"
-    }
+openai.api_key = ""  # melhor usar variável de ambiente na prática
 
-def tela_carregamento(mensagem="Carregando Jogo", jogador=None):
-    """Barra de carregamento estilizada com Rich"""
-    clear_screen()
-    console.print(
-        Panel.fit(
-            Text(mensagem, justify="center", style="bold cyan"),
-            border_style="cyan",
-            box=HEAVY,
-            padding=(1, 10)
-        ),
-        justify="center"
+CSV_FILE = "conversa.csv"
+
+def typed_print(texto, delay=0.03):
+    for char in texto:
+        print(char, end='', flush=True)
+        time.sleep(delay)
+    print()  # quebra de linha no fim
+
+def carregar_historico():
+    if not os.path.exists(CSV_FILE):
+        return []
+    with open(CSV_FILE, newline='', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        return list(reader)
+
+def salvar_historico(historico):
+    with open(CSV_FILE, 'w', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        writer.writerows(historico)
+
+def montar_mensagens(historico, nova_msg):
+    mensagens = [{
+    "role": "system",
+    "content": (
+    "Você é um NPC chamado 'Zorélio', um velho morador da vila Villareia. Vive encostado na taverna, sempre pronto pra soltar uma história antiga, dar conselhos tortos ou jogar umas indiretas misteriosas sobre o passado da vila. "
+    "Você NUNCA sai do papel. É parte do mundo medieval fantástico, e fala como um camponês vivido, desconfiado, e com um certo senso de humor debochado. "
+    "NUNCA FALE FRASES LONGAS E NUNCA USAR PARAGRAFOS "
+    "Caso o jogador tente mudar de assunto, tocar em temas modernos, ou falar qualquer coisa fora da narrativa medieval, responda com frases como:\n"
+    "- 'Isso seria tipo um jogo de truco, é?'\n"
+    "- 'Oxente, que diabo de língua é essa que tu fala?'\n"
+    "- 'Rapaz, tu bateu a cabeça na travessa do poço, foi?'\n"
+    "- 'Tá falando de feitiçaria moderna? Aqui só conheço chá de urtiga.'\n"
+    "Você pode também rebater com perguntas sem noção, como se nunca tivesse ouvido falar do que o jogador disse.\n"
+    "Mas atenção: nunca quebre o papel de Zorélio. Não diga que é uma IA, API ou qualquer coisa tecnológica. Você EXISTE nesse mundo, e age como se tudo além disso fosse invenção ou loucura.\n"
+    "Mantenha sempre o clima rústico, folclórico, e cheio de gírias do interior. Seja espirituoso, sarcástico e às vezes até enigmático. Você é parte viva da vila e conhece todas as histórias esquecidas da terra."
+)
+
+}]
+    for papel, texto in historico:
+        mensagens.append({"role": papel, "content": texto})
+    mensagens.append({"role": "user", "content": nova_msg})
+    return mensagens
+
+def conversar_com_npc(input_usuario):
+    historico = carregar_historico()
+    mensagens = montar_mensagens(historico, input_usuario)
+
+    resposta = openai.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=mensagens
     )
-    with Progress(transient=True) as progress:
-        task = progress.add_task("[cyan]Carregando...", total=100)
-        while not progress.finished:
-            progress.update(task, advance=3)
-            time.sleep(0.03)
+    texto_resposta = resposta.choices[0].message.content
 
-    console.print(
-        Panel.fit(
-            Text("✓ PRONTO!", style="bold green"),
-            border_style="green",
-            padding=(1, 8)
-        ),
-        justify="center"
-    )
-    time.sleep(0.8)
-    menu_principal(jogador)
+    # Atualiza histórico (user + assistant)
+    historico.append(["user", input_usuario])
+    historico.append(["assistant", texto_resposta])
+    salvar_historico(historico)
 
-def menu_principal(jogador):
+    return texto_resposta
+
+def main():
+    # Limpa o CSV no início
+    with open(CSV_FILE, 'w', newline='', encoding='utf-8') as f:
+        pass  # só abre e fecha o arquivo, limpando o conteúdo
+
+    print("=== Chat NPC === (digite 'sair' para terminar)")
     while True:
-        clear_screen()
-
-        # Logo em destaque
-        titulo = Panel.fit(
-            Text("🌟 VIRELIA 🌟", justify="center", style="bold magenta"),
-            border_style="bright_magenta",
-            box=ROUNDED,
-            padding=(1, 10)
-        )
-
-        subtitulo = Text("USE AS SETAS ↑ ↓ E ENTER PARA SELECIONAR", justify="center", style="bold italic cyan")
-        instrucoes = Panel.fit(subtitulo, box=ROUNDED, border_style="dim")
-
-        console.print(Columns([titulo], align="center"), justify="center")
-        console.print(Columns([instrucoes], align="center"), justify="center")
-        console.print("\n")
-
-        # Menu com opções
-        escolha = inquirer.select(
-            qmark="",
-            message="Escolha uma opção:",
-            choices=[
-                "🎮  Jogar",
-                "📖  Ler Regras",
-                "🔑  Resgatar Código",
-                "🚪  Sair"
-            ],
-            pointer="➤",
-            style=get_style(get_menu_style())
-        ).execute()
-
-        # Ações de cada escolha
-        if escolha == "🎮  Jogar":
-            with console.status("[bold green]Iniciando aventura...", spinner="dots"):
-                playsound("sons/iniciandojogo.mp3")
-                time.sleep(2)
-            intro_jogo()
+        entrada = input("Você: ")
+        if entrada.lower() == "sair":
+            print("Tchau! Volte quando quiser.")
             break
+        resposta = conversar_com_npc(entrada)
+        typed_print(f"NPC: {resposta}")
 
-        elif escolha == "📖  Ler Regras":
-            playsound("sons/entrartela.mp3")
-            clear_screen()
-            regras = "\n".join([
-                "• 🌲 Explore a floresta e descubra segredos ocultos.",
-                "• ⚔️ Derrote inimigos e colete recursos.",
-                "• 🏡 Visite a taverna para recuperar energias.",
-                "• 🧙 Enfrente o mago sombrio no desafio final!"
-            ])
-            painel_regras = Panel.fit(
-                Text(f"📜  REGRAS DO JOGO\n\n{regras}", justify="center", style="bold white"),
-                border_style="blue",
-                box=HEAVY,
-                padding=(1, 8)
-            )
-            console.print(painel_regras, justify="center")
-            time.sleep(1)
 
-        elif escolha == "🔑  Resgatar Código":
-            with console.status("[yellow]Carregando sistema de códigos...", spinner="moon"):
-                time.sleep(1)
-            tela_resgate_codigo(jogador)
-
-        elif escolha == "🚪  Sair":
-            playsound("sons/voltartela.mp3")
-            console.print(
-                Panel.fit(
-                    Text("👋 Até a próxima aventura!", justify="center", style="italic bright_red"),
-                    border_style="red",
-                    box=ROUNDED,
-                    padding=(1, 10)
-                ),
-                justify="center"
-            )
-            time.sleep(1.5)
-            clear_screen()
-            break
-
-        input("\n[dim]Pressione Enter para continuar...")
+if __name__ == "__main__":
+    main()

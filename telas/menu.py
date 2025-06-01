@@ -31,6 +31,11 @@ def get_menu_style():
 def tela_carregamento(mensagem="Carregando Jogo", jogador=None):
     """Barra de carregamento estilizada com Rich"""
     clear_screen()
+    
+    # Garante que a mensagem seja string
+    if not isinstance(mensagem, str):
+        mensagem = str(mensagem)
+
     console.print(
         Panel.fit(
             Text(mensagem, justify="center", style="bold cyan"),
@@ -40,6 +45,7 @@ def tela_carregamento(mensagem="Carregando Jogo", jogador=None):
         ),
         justify="center"
     )
+    
     with Progress(transient=True) as progress:
         task = progress.add_task("[cyan]Carregando...", total=100)
         while not progress.finished:
@@ -54,6 +60,7 @@ def tela_carregamento(mensagem="Carregando Jogo", jogador=None):
         ),
         justify="center"
     )
+    
     time.sleep(0.8)
     menu_principal(jogador)
 
@@ -137,3 +144,4 @@ def menu_principal(jogador):
             break
 
         input("\n[dim]Pressione Enter para continuar...")
+
