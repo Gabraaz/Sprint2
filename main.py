@@ -1,5 +1,4 @@
-from telas.menu import tela_carregamento
-from telas.menu import menu_principal
+from telas.menu import menu_principal, tela_carregamento
 
 jogador = {
     "inventario": {}
@@ -7,3 +6,5 @@ jogador = {
 
 if __name__ == "__main__":
     menu_principal(jogador)
+
+

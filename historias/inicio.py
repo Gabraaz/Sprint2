@@ -1,4 +1,4 @@
-from InquirerPy import inquirer
+from InquirerPy import inquirer, get_style
 from prompt_toolkit.styles import Style
 from time import sleep
 from rich.console import Console
@@ -6,30 +6,34 @@ from rich.align import Align
 from rich.panel import Panel
 from rich.text import Text
 
+from InquirerPy.utils import InquirerPyStyle
+
+
 from util import typedPrint, Config, clear_screen
 from personagem.inventario import adicionar_item, remover_item, mostrar_inventario
 from historias.floresta import floresta_inicio
 
 console = Console()
 
-# Dicionário de estilo simples
+# Dicionário de estilo simples    #Vai usar a cor do POINTER como selecionado.
 style_dict = {
-    "question": "bold",
-    "answer": "italic",
-    "pointer": "bold #00ffff",     # Ciano brilhante
-    "selected": "#ff9d00",         # Laranja
-    "separator": "#666666",
-    "instruction": "",
-    "text": "",
+    "question": "bold white",
+    "answer": "bold #7FFF00",       # Verde neon
+    "pointer": "bold #FF4500",      # Magenta neon
+    "highlighted": "#FF4500",       # Laranja queimado
+    "separator": "#555555",         #
+    "instruction": "italic #AAAAAA",
+    "marker": "#FFD700",            # Dourado para checkboxes
 }
 
+style_2 = get_style({"questionmark": "#ffffff", "answer": "#000000"}, style_override=False)
+
 # Converte o dicionário para o objeto que o InquirerPy espera
-style = Style.from_dict(style_dict)
+style = InquirerPyStyle(style_dict)
 
 
 def intro_jogo():
     clear_screen()
-    
     # Painel de título com um estilo épico
     titulo = Text("🌑 PRÓLOGO 🌒", style="bold magenta on black", justify="center")
     console.print(Align.center(Panel(titulo, width=60, border_style="magenta")), justify="center")
@@ -60,10 +64,10 @@ def intro_jogo():
         choices=[
             "🌊 Vasculhar a praia em busca de suprimentos",
             "🌲 Adentrar a floresta sombria à frente",
-            "🕰️ Esperar por ajuda... se é que ela virá"
+            "🕰 Esperar por ajuda... se é que ela virá"
         ],
         pointer="➤",
-        style=style_dict
+        style=style
     ).execute()
 
     if "praia" in opcao:
@@ -90,10 +94,10 @@ def transicao_para_floresta():
         console.print(Align.center(Text(frase, style="italic cyan")), justify="center")
         sleep(1.5)
 
-    sleep(1)
+    sleep(2)
+    clear_screen()
     console.print(Align.center(Panel("🌲 [bold green]Floresta de Virelia[/bold green] 🌲", border_style="green")), justify="center")
     sleep(2)
-    sleep(15)
 
 def explorar_praia():
     clear_screen()

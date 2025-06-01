@@ -1,6 +1,8 @@
 # util.py
 import os
 import time
+import shutil
+
 
 class Config:
     speed = 0.05
@@ -32,4 +34,14 @@ def color_text(text, cor="amarelo"):
         "reset": "\033[0m"
     }
     return f"{cores.get(cor, cores['branco'])}{text}{cores['reset']}"
+
+
+
+#CENTRALIZAR TEXTO
+def centralizar_com_ponteiro(texto):
+    largura_terminal = shutil.get_terminal_size().columns
+    largura_texto = len(texto)
+    largura_total = largura_texto + 4  # 4 = espaço pro ponteiro ➤ e espaço extra
+    margem = max((largura_terminal - largura_total) // 2, 0)
+    return " " * margem + texto
 
