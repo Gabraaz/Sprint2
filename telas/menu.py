@@ -10,6 +10,7 @@ from InquirerPy import inquirer, get_style
 from playsound import playsound
 from codigos import tela_resgate_codigo
 from historias.inicio import intro_jogo
+from historias.floresta import floresta_inicio
 import time
 
 console = Console()
@@ -102,7 +103,7 @@ def menu_principal(jogador):
             with console.status("[bold green]Iniciando aventura...", spinner="dots"):
                 playsound("sons/iniciandojogo.mp3")
                 time.sleep(2)
-            intro_jogo()
+            floresta_inicio()   #USADO PARA PUXAR FUNCOES E TESTES
             break
 
         elif escolha == "📖  Ler Regras":

@@ -10,7 +10,7 @@ from InquirerPy.utils import InquirerPyStyle
 
 
 from util import typedPrint, Config, clear_screen
-from personagem.inventario import adicionar_item, remover_item, mostrar_inventario
+from player.inventario import adicionar_item, remover_item, mostrar_inventario
 from historias.floresta import floresta_inicio
 
 console = Console()
@@ -19,7 +19,7 @@ console = Console()
 style_dict = {
     "question": "bold white",
     "answer": "bold #7FFF00",       # Verde neon
-    "pointer": "bold #FF4500",      # Magenta neon
+    "pointer": "bold #5BE3DA",      # Magenta neon
     "highlighted": "#FF4500",       # Laranja queimado
     "separator": "#555555",         #
     "instruction": "italic #AAAAAA",
@@ -60,6 +60,7 @@ def intro_jogo():
     # Menu interativo com ponteiro
     
     opcao = inquirer.select(
+        qmark="",
         message="Você se ergue da areia fria. Três escolhas se desenham diante de você:",
         choices=[
             "🌊 Vasculhar a praia em busca de suprimentos",
