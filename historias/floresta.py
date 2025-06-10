@@ -8,13 +8,9 @@ from rich.panel import Panel
 from rich.text import Text
 import time
 
-# Importa mostrar_caderno se usar ele aqui
-# from fofocas import mostrar_caderno  # se existir
-
 console = Console()
 
 def floresta_inicio():
-    
     while True:
         clear_screen()
         console.print(Align.center(Panel("🌲 [bold green]Floresta de Virelia[/bold green] 🌲", border_style="green")), justify="center")
@@ -22,7 +18,7 @@ def floresta_inicio():
         print("1. Ir até o arbusto")
         print("2. Continuar andando")
         print("3. Abrir o inventário")
-        print("4. Abrir caderno")  # só se fizer sentido no contexto
+        print("4. Abrir caderno")
 
         escolha = input("Escolha uma opção: ")
 
@@ -32,11 +28,15 @@ def floresta_inicio():
             # Inicia o papo com o Salazar
             while True:
                 fala = input("Você: ")
-                resposta = primeiraFala_salazar(fala)
+                resposta, dialogo_concluido = primeiraFala_salazar(fala)
                 typedPrint(resposta, Config.speed)
 
-                # Sai do loop se o diálogo chegou ao fim
-                if "taverna" in resposta.lower() or "caminho" in resposta.lower():
+                # Sai do loop se o diálogo foi concluído (todos objetivos cumpridos)
+                if dialogo_concluido:
+                    typedPrint("\nSalazar parece satisfeito com as informações que você forneceu.", Config.speed)
+                    time.sleep(2)
+                    # Aqui você pode adicionar a transição para a taverna ou próxima cena
+                    taverna()  # Se quiser ir direto para a taverna
                     break
 
         elif escolha == "2":

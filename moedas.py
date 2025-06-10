@@ -19,3 +19,4 @@ def ganhar(valor):
     global saldo
     saldo += valor
     print(f"Ganhou {valor} moedas. Saldo agora: {saldo}.")
+    

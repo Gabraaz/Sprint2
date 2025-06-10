@@ -12,13 +12,16 @@ class Config:
 def clear_screen(): #funçao para limpar o terminal
     os.system('cls' if os.name == 'nt' else 'clear')
 
-
-
 # ANIMAR TEXTO
-def typedPrint(texto, delay=0.05): #funçao para fazer o texto animado.
+
+def typedPrint(texto, delay=0.05):
+    texto = str(texto)  # Garante que 'texto' é uma string
     for char in texto:
+        if char in ".!?,:":
+            time.sleep(delay + 0.1)
+        else:
+            time.sleep(delay)
         print(char, end='', flush=True)
-        time.sleep(delay if char not in ".!?,:" else delay + 0.1)
     print()
 
 # COR PARA TEXTO
